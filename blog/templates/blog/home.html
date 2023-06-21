@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
+{% load blog_extras %}
 {% block content %}
-   <h2>Blog</h2>
-        <div class="grid-container">
-            {% for blog in blogs %}
-                <div class="post">
-                    <a href="{% url 'view_blog' blog.id %}">
-                        <h4>Billet : {{ blog.title }}</h4>
-                        <img src="{{ blog.photo.image.url }}">
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+    <h2>Votre flux</h2>
+    <div class="grid-container">
+        {% for instance in page_obj %}
+            {% if instance|model_type == 'Blog' %}
+            	{% include 'blog/partials/blog_snippet.html' with blog=instance %}
+            {% elif instance|model_type == 'Photo' %}
+            	{% include 'blog/partials/photo_snippet.html' with photo=instance %}
+            {% endif %}
+        {% endfor %}
+        <span>
+        	{% if page_obj.has_previous %}
+        		<a href="?page=1">1</a>
+        		<a href="?page={{ page_obj.previous_page_number }}"><</a>
+       		{% endif %}
+       	<span>
+       		Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+       	</span>
+       		{% if page_obj.has_next %}
+       			<a href="?page={{ page_obj.next_page_number }}">></a>
+       			<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+			{% endif %}
+       	</span>		
+    </div>
 {% endblock content %}

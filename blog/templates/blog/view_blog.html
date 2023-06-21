@@ -4,5 +4,7 @@
     <img src="{{ blog.photo.image.url }}">
     <p>{{ blog.photo.caption }}</p>
     <p>{{ blog.content }}</p>
- 	<p><a href="{% url 'edit_blog' blog.id %}">Modifier le billet</a></p>
+    {% if perms.blog.change_photo %}
+ 		<p><a href="{% url 'edit_blog' blog.id %}">Modifier le billet</a></p>
+	{% endif %}
 {% endblock content %}
